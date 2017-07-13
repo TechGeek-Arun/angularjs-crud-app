@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CRUD Application</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+</head>
+<!-- Controller name goes here -->
+<body ng-app="crudApp" ng-controller="crudCompanyCtrl">
+<h1 style="text-align: center; background-color: black;color: white;">CRUD Application</h1>
+  <form class="form-horizontal" role="form" ng-submit="addRow()">
+ 	<div class="form-group">
+ 		<label class="col-md-2 control-label">Name</label>
+ 		<div class="col-md-4">
+ 			<input type="text" class="form-control" name="name"
+ 				ng-model="name" required />
+ 		</div>
+ 	</div>
+ 	<div class="form-group">
+ 		<label class="col-md-2 control-label">Employees</label>
+ 		<div class="col-md-4">
+ 			<input type="text" class="form-control" name="employees"
+ 				ng-model="employees"  ng-pattern="onlyNumbers"  required/>
+ 		</div>
+ 	</div>
+ 	<div class="form-group">
+ 		<label class="col-md-2 control-label">Headoffice</label>
+ 		<div class="col-md-4">
+ 			<input type="text" class="form-control" name="headoffice"
+ 				ng-model="headoffice" required/>
+ 		</div>
+ 	</div>
+ 	<div class="form-group">
+ 		<div style="padding-left:110px">
+ 			<input type="submit" value="Submit" class="btn btn-primary"/>
+ 		</div>
+ 	</div>
+ </form>
+<hr>
+ <input type="text"  name="searchKeyword" ng-model="searchKeyword" placeholder="Search....."/>
+</hr>
+  <table class="table">
+  	<tr>
+  		<th>Name
+  		</th>
+  		<th>Employees
+  		</th>
+  		<th>Head Office
+  		</th>
+      <th>Action
+		</th>
+  	</tr>
+  	<tr ng-repeat="company in companies | filter: searchKeyword ">
+  		<td>{{company.name}}
+  		</td>
+  		<td>{{company.employees}}
+  		</td>
+  		<td>{{company.headoffice}}
+  		</td>
+      <td>
+		<input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(company.name)"/>
+		</td>
+  	</tr>
+  </table>
+  <script>
+  var crudApp = angular.module("crudApp", []);
+  crudApp.controller("crudCompanyCtrl", function($scope) {
+    $scope.onlyNumbers = /^\d+$/;
+  $scope.companies = [
+                      { 'name':'Infosys Technologies',
+                      	'employees': 125000,
+                      	'headoffice': 'Bangalore'},
+                      	{ 'name':'Cognizant Technologies',
+  	                    	'employees': 100000,
+  	                    	'headoffice': 'Bangalore'},
+  	                    	{ 'name':'Wipro',
+  		                    	'employees': 115000,
+  		                    	'headoffice': 'Bangalore'},
+  		                    	{ 'name':'Tata Consultancy Services (TCS)',
+  			                    	'employees': 150000,
+  			                    	'headoffice': 'Bangalore'},
+  			                    	{ 'name':'HCL Technologies',
+  				                    	'employees': 90000,
+  				                    	'headoffice': 'Noida'},
+                      ];
+  $scope.addRow = function(){
+  	$scope.companies.push({ 'name':$scope.name, 'employees': $scope.employees, 'headoffice':$scope.headoffice });
+  	$scope.name='';
+  	$scope.employees='';
+  	$scope.headoffice='';
+  };
+  $scope.removeRow = function(name){
+  		var index = -1;
+  		var comArr = eval( $scope.companies );
+  		for( var i = 0; i < comArr.length; i++ ) {
+  			if( comArr[i].name === name ) {
+  				index = i;
+  				break;
+  			}
+  		}
+  		if( index === -1 ) {
+  			alert( "Something gone wrong" );
+  		}
+  		$scope.companies.splice( index, 1 );
+  	};
+  });
+  </script>
+</body>
+</html>
